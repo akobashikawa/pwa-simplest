@@ -1,40 +1,60 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1, user-scalable=yes">
-  <title>PWA Simplest</title>
-  <link rel="manifest" href="manifest.json">
-  <link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
-  <link rel="apple-touch-icon" href="images/manifest/icon-48x48.png">
-  <link rel="apple-touch-icon" sizes="72x72" href="images/manifest/icon-72x72.png">
-  <link rel="apple-touch-icon" sizes="96x96" href="images/manifest/icon-96x96.png">
-  <link rel="apple-touch-icon" sizes="144x144" href="images/manifest/icon-144x144.png">
-  <link rel="apple-touch-icon" sizes="192x192" href="images/manifest/icon-192x192.png">
-  <meta name="apple-mobile-web-app-capable" content=yes>
-  <meta name="mobile-web-app-capable" content="yes">
-  <meta name="application-name" content="PWA Simplest">
-  <meta name="msapplication-TileImage" content="images/manifest/icon-144x144.png">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1, user-scalable=yes">
+    <title>PWA Simplest</title>
+    <link rel="manifest" href="manifest.json">
+    <link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
+    <link rel="apple-touch-icon" href="images/manifest/icon-48x48.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="images/manifest/icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="96x96" href="images/manifest/icon-96x96.png">
+    <link rel="apple-touch-icon" sizes="144x144" href="images/manifest/icon-144x144.png">
+    <link rel="apple-touch-icon" sizes="192x192" href="images/manifest/icon-192x192.png">
+    <meta name="apple-mobile-web-app-capable" content=yes>
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="application-name" content="PWA Simplest">
+    <meta name="msapplication-TileImage" content="images/manifest/icon-144x144.png">
 </head>
+
 <body>
-  <h1>PWA Simplest</h1>
+    <h1>PWA Simplest</h1>
 
-  <div id="time"></div>
+    <div id="time"></div>
 
-  <script>
-    document.getElementById('time').innerHTML = new Date();
+    <script>
+        document.getElementById('time').innerHTML = new Date();
 
-    if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('service-worker.js', {
-        scope: './'
-      }).then(function() {
-        console.log('CLIENT: service worker registration complete.');
-      }, function() {
-        console.log('CLIENT: service worker registration failure.');
-      });
-    } else {
-      console.log('CLIENT: service worker is not supported.');
-    }
-  </script>
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('service-worker.js', {
+                scope: './'
+            }).then(function() {
+                console.log('CLIENT: service worker registration complete.');
+            }, function() {
+                console.log('CLIENT: service worker registration failure.');
+            });
+        } else {
+            console.log('CLIENT: service worker is not supported.');
+        }
+
+        window.addEventListener('beforeinstallprompt', function(e) {
+            // beforeinstallprompt Event fired
+
+            // e.userChoice will return a Promise.
+            // For more details read: https://developers.google.com/web/fundamentals/getting-started/primers/promises
+            e.userChoice.then(function(choiceResult) {
+
+                console.log(choiceResult.outcome);
+
+                if (choiceResult.outcome == 'dismissed') {
+                    console.log('User cancelled home screen install');
+                } else {
+                    console.log('User added to home screen');
+                }
+            });
+        });
+    </script>
 </body>
+
 </html>
